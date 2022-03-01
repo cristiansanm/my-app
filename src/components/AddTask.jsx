@@ -1,11 +1,21 @@
 import { Button, TextField } from '@mui/material';
-import React, { useState } from 'react';
+import { useState } from 'react';
+import { nanoid } from 'nanoid';
 
 function AddTask({ addTask }) {
-  const [newTask, setNewTask] = useState('');
+  const [newTask, setNewTask] = useState({
+      id:"",
+      description:"",
+  });
+  
   const handleNewTask = (event) => {
-      setNewTask(event.target.value);
+
+        setNewTask({
+            id: nanoid(),
+            description: event.target.value
+        });
   }
+
   return (
     <div className="flex flex-col">
         <h1 className="text-3xl font-bold text-center">Agregar Tarea</h1>
@@ -13,7 +23,7 @@ function AddTask({ addTask }) {
            <TextField
               id="task"
               label="Agregar Tarea"
-              value={newTask}
+              value={newTask.description}
               onChange={handleNewTask}
               sx={{width: '80%'}}
             /> 
