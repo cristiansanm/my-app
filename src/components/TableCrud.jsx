@@ -1,4 +1,4 @@
-import React from 'react';
+import { useState } from 'react';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
@@ -6,24 +6,27 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
-import { IconButton, TextField } from '@mui/material';
+import { IconButton, TextField, Button } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import { yellow } from '@mui/material/colors';
  
 //TODO: finish edit task
-const EditTaskField = (task) => {
+const EditTaskField = (task, closeEdit) => {
   return (
     <>
       <TextField
         id="textFieldTask"
         value={task.description}
       />
+      <Button onClick={closeEdit}>Editar</Button>
     </>
   )
 }
 
 const TableCrud = ({ data, deleteTask, editTask }) => {
+  const [openEditTask, setOpenEditTask] = useState(false);
+  const handleCloseEdit = () => setOpenEditTask(false)
   return (
     <>
     <TableContainer component={Paper}>
@@ -45,7 +48,14 @@ const TableCrud = ({ data, deleteTask, editTask }) => {
                 {row.id}
               </TableCell>
               <TableCell component="th" scope="row" align="right">
-                {row.description}
+                { openEditTask ? (
+                  <EditTaskField 
+                    task={row}
+                    closeEdit={ handleCloseEdit }/>
+                ) : (
+                  row.description
+                )}
+                
               </TableCell>
               <TableCell align="right">
                 <IconButton 
@@ -55,7 +65,7 @@ const TableCrud = ({ data, deleteTask, editTask }) => {
                 </IconButton>
                 <IconButton 
                   sx={{color: yellow[600]}}
-                  onClick={()=>editTask(row)}>
+                  onClick={()=>setOpenEditTask(true)}>
                     <EditIcon/>
                 </IconButton>
               </TableCell>
